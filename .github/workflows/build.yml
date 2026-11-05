@@ -33,9 +33,6 @@ run-name: Taskarian ${{ inputs.source_sha }} / ${{ inputs.request_id }}
 permissions:
   contents: read
   actions: read
-concurrency:
-  group: browser-${{ inputs.source_sha }}
-  cancel-in-progress: false
 jobs:
   apk:
     runs-on: ubuntu-24.04
