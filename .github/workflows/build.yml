@@ -51,14 +51,14 @@ jobs:
       ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
       # mach replaces GRADLE_OPTS; GRADLE_FLAGS is its supported argument path.
       GRADLE_FLAGS: --no-daemon --max-workers=2 --build-cache
-      MOZ_SOURCE_REPO: https://github.com/openresearchtools/taskarian
+      MOZ_SOURCE_REPO: https://github.com/openresearchtools/Taskarian
       MOZ_SOURCE_CHANGESET: ${{ inputs.source_sha }}
       SCCACHE_IDLE_TIMEOUT: '0'
       SCCACHE_BASEDIRS: ${{ github.workspace }}:${{ github.workspace }}-obj-android
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       with:
-        repository: openresearchtools/taskarian
+        repository: openresearchtools/Taskarian
         ref: ${{ inputs.source_sha }}
         persist-credentials: false
     - name: Select the Android architecture
@@ -227,15 +227,15 @@ jobs:
         for item in "auth:$AUTH_RUN:auth-termux-$TERMUX_ARCH" "search:$SEARCH_RUN:search-runtime-termux-$TERMUX_ARCH" "node:$NODE_RUN:node-runtime-termux-$TERMUX_ARCH" "display:$ENVIRONMENTS_RUN:display-loader-termux" "os:$ENVIRONMENTS_RUN:os-termux-$TERMUX_ARCH" "office:$OFFICE_RUN:office-termux-$TERMUX_ARCH" "files:$OFFICE_RUN:files-termux-$TERMUX_ARCH"; do
           IFS=: read -r target run artifact <<< "$item"
           while true; do
-            count=$(gh api --paginate "repos/openresearchtools/taskarian/actions/runs/$run/artifacts" --jq ".artifacts[] | select(.name == \"$artifact\" and .expired == false) | .id" | wc -l)
+            count=$(gh api --paginate "repos/openresearchtools/Taskarian/actions/runs/$run/artifacts" --jq ".artifacts[] | select(.name == \"$artifact\" and .expired == false) | .id" | wc -l)
             if [ "$count" = 1 ]; then break; fi
-            status=$(gh api "repos/openresearchtools/taskarian/actions/runs/$run" --jq '.status')
+            status=$(gh api "repos/openresearchtools/Taskarian/actions/runs/$run" --jq '.status')
             if [ "$status" = completed ]; then echo "Required $artifact is missing from completed run $run" >&2; exit 1; fi
             if (( SECONDS >= deadline )); then echo "Shared 300-minute companion deadline expired waiting for $artifact from run $run" >&2; exit 1; fi
             echo "Waiting for $artifact from run $run within the shared companion deadline"
             sleep 30
           done
-          gh run download "$run" --repo "openresearchtools/taskarian" --name "$artifact" --dir "$RUNNER_TEMP/companion/$target"
+          gh run download "$run" --repo "openresearchtools/Taskarian" --name "$artifact" --dir "$RUNNER_TEMP/companion/$target"
         done
         python3 agent/packaging/android-notices.py --architecture "$TERMUX_ARCH" \
           --auth-archive "$RUNNER_TEMP/companion/auth/auth-termux-$TERMUX_ARCH.tar.gz" \
