@@ -1,6 +1,6 @@
-# BashKitten Android x86_64 builder
+# Taskarian Android x86_64 builder
 
-Build-only repository for [BashKitten](https://github.com/openresearchtools/BashKitten).
+Build-only repository for [Taskarian](https://github.com/openresearchtools/Taskarian).
 The workflow checks out the requested exact product commit and builds the native
 Android x86_64 browser, Tor and remote client with the existing APK signing identity.
 
